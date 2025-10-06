@@ -13,31 +13,44 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// define o modelo de dados Empresa
-model Empresa {
-  id Int @id @default(autoincrement())
-  nome String
-  email String @unique
-}
-
 model TipoDeficiencia {
-  id        Int                   @id @default(autoincrement())
-  nome      String                @unique
+  id        Int                  @id @default(autoincrement())
+  nome      String               @unique
   subtipos  SubtipoDeficiencia[]
-  createdAt DateTime              @default(now())
-  updatedAt DateTime              @updatedAt
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
 }
 
 model SubtipoDeficiencia {
-  id         Int                  @id @default(autoincrement())
-  nome       String
-  tipoId     Int
-  tipo       TipoDeficiencia      @relation(fields: [tipoId], references: [id], onDelete: Cascade)
-  barreiras  SubtipoBarreira[]
-  createdAt  DateTime             @default(now())
-  updatedAt  DateTime             @updatedAt
+  id        Int               @id @default(autoincrement())
+  nome      String
+  tipoId    Int
+  tipo      TipoDeficiencia   @relation(fields: [tipoId], references: [id], onDelete: Cascade)
+  barreiras SubtipoBarreira[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
   @@unique([tipoId, nome]) // evita subtipo duplicado dentro do mesmo tipo
+  VagaSubtipo VagaSubtipo[]
+}
+
+model Barreira {
+  id              Int                      @id @default(autoincrement())
+  descricao       String                   @unique
+  subtipos        SubtipoBarreira[]
+  acessibilidades BarreiraAcessibilidade[]
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+}
+
+model Acessibilidade {
+  id        Int                      @id @default(autoincrement())
+  descricao String                   @unique
+  barreiras BarreiraAcessibilidade[]
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
+
+  VagaAcessibilidade VagaAcessibilidade[]
 }
 
 // tabelas de junção explícitas (para fácil evolução)
@@ -51,29 +64,59 @@ model SubtipoBarreira {
   @@index([barreiraId])
 }
 
-model Barreira {
-  id               Int                      @id @default(autoincrement())
-  descricao        String                   @unique
-  subtipos         SubtipoBarreira[]
-  acessibilidades  BarreiraAcessibilidade[]
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
-}
-
 model BarreiraAcessibilidade {
   barreiraId       Int
   acessibilidadeId Int
-  barreira         Barreira        @relation(fields: [barreiraId], references: [id], onDelete: Cascade)
-  acessibilidade   Acessibilidade  @relation(fields: [acessibilidadeId], references: [id], onDelete: Cascade)
+  barreira         Barreira       @relation(fields: [barreiraId], references: [id], onDelete: Cascade)
+  acessibilidade   Acessibilidade @relation(fields: [acessibilidadeId], references: [id], onDelete: Cascade)
 
   @@id([barreiraId, acessibilidadeId])
   @@index([acessibilidadeId])
 }
 
-model Acessibilidade {
-  id               Int                      @id @default(autoincrement())
-  descricao        String                   @unique
-  barreiras        BarreiraAcessibilidade[]
-  createdAt        DateTime                 @default(now())
-  updatedAt        DateTime                 @updatedAt
+model Empresa {
+  id        Int     @id @default(autoincrement())
+  nome      String
+  cnpj      String? @unique
+  email     String? @unique
+  vagas     Vaga[]
+
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vaga {
+  id              Int                   @id @default(autoincrement())
+  empresaId       Int
+  empresa         Empresa               @relation(fields: [empresaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  descricao       String
+  escolaridade    String                // <- adicionado (ou troque por enum se quiser)
+  subtiposAceitos VagaSubtipo[]
+  acessibilidades VagaAcessibilidade[]
+
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model VagaSubtipo {
+  vagaId    Int
+  subtipoId Int
+  vaga      Vaga               @relation(fields: [vagaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subtipo   SubtipoDeficiencia @relation(fields: [subtipoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([vagaId, subtipoId])
+  @@index([subtipoId])
+}
+
+model VagaAcessibilidade {
+  vagaId           Int
+  acessibilidadeId Int
+  vaga             Vaga           @relation(fields: [vagaId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  acessibilidade   Acessibilidade @relation(fields: [acessibilidadeId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([vagaId, acessibilidadeId])
+  @@index([acessibilidadeId])
 }

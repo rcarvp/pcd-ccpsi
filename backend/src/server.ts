@@ -9,6 +9,8 @@ import subtiposRoutes from "./routes/subtipos.routes";
 import barreirasRoutes from "./routes/barreiras.routes";
 import acessibilidadesRoutes from "./routes/acessibilidades.routes";
 import vinculosRoutes from "./routes/vinculos.routes"
+import empresasRoutes from "./routes/empresas.routes";
+import vagasRoutes from "./routes/vagas.routes";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -21,6 +23,9 @@ app.use("/subtipos", subtiposRoutes);
 app.use("/vinculos", vinculosRoutes)
 app.use("/barreiras", barreirasRoutes);
 app.use("/acessibilidades", acessibilidadesRoutes);
+
+app.use("/empresas", empresasRoutes);
+app.use("/vagas", vagasRoutes);
 
 // middleware de erro genérico
 app.use((err: any, _req: any, res: any, _next: any) => {
