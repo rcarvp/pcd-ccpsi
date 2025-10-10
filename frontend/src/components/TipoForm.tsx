@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { api } from "../lib/api";
+
 type Props = {
   onCreated: () => void; // para recarregar a lista ao criar
 };
+
 export default function TipoForm({ onCreated }: Props) {
   const [nome, setNome] = useState("");
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-  
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErro(null);
@@ -27,6 +29,7 @@ export default function TipoForm({ onCreated }: Props) {
       setLoading(false);
     }
   }
+
   return (
     <form onSubmit={handleSubmit} className="card space-y-3">
       <div>

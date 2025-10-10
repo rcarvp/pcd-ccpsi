@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import type { TipoDeficiencia } from "../types";
 
-type Props = { pedro: () => void };
+type Props = { onCreated: () => void };
 
-export default function SubtipoForm({ pedro }: Props) {
+export default function SubtipoForm({ onCreated }: Props) {
   const [tipos, setTipos] = useState<TipoDeficiencia[]>([]);
   const [tipoId, setTipoId] = useState<number | "">("");
   const [nome, setNome] = useState("");
@@ -18,7 +18,7 @@ export default function SubtipoForm({ pedro }: Props) {
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault(); // não recarrega a página
+    e.preventDefault();
     setErro(null);
 
     const trimmed = nome.trim();
@@ -32,7 +32,7 @@ export default function SubtipoForm({ pedro }: Props) {
       await api.criarSubtipo(trimmed, Number(tipoId));
       setNome("");
       setTipoId("");
-      pedro(); // chama a função do pai - carregar()
+      onCreated();
     } catch (e: any) {
       setErro(e.message ?? "Erro ao criar subtipo");
     } finally {

@@ -3,7 +3,7 @@ import { api } from "../lib/api";
 
 type Props = { onCreated: () => void };
 
-export default function BarreiraForm({ onCreated }: Props) {
+export default function AcessibilidadeForm({ onCreated }: Props) {
   const [descricao, setDescricao] = useState("");
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export default function BarreiraForm({ onCreated }: Props) {
 
     setLoading(true);
     try {
-      await api.criarBarreira(descricao.trim());
+      await api.criarAcessibilidade(descricao.trim());
       setDescricao("");
       onCreated();
     } catch (e: any) {
@@ -32,10 +32,10 @@ export default function BarreiraForm({ onCreated }: Props) {
   return (
     <form onSubmit={handleSubmit} className="card space-y-3">
       <div>
-        <label className="label">Descrição da barreira</label>
+        <label className="label">Descrição da acessibilidade</label>
         <input
           className="input"
-          placeholder="ex.: Escadas"
+          placeholder="ex.: Elevador"
           value={descricao}
           onChange={(e) => setDescricao(e.target.value)}
           disabled={loading}
@@ -44,7 +44,7 @@ export default function BarreiraForm({ onCreated }: Props) {
       </div>
       <div className="flex justify-end">
         <button disabled={loading} className="btn btn-primary">
-          {loading ? "Salvando..." : "Criar barreira"}
+          {loading ? "Salvando..." : "Criar Acessibilidade"}
         </button>
       </div>
     </form>

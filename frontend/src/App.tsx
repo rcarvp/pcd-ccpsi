@@ -5,6 +5,11 @@ import AdminPage from "./pages/AdminPage";
 import TiposPage from "./pages/TiposPage";
 import SubtiposPage from "./pages/SubtiposPage";
 import BarreirasPage from "./pages/BarreirasPage";
+import AcessibilidadesPage from "./pages/AcessibilidadesPage";
+import EmpresaPage from "./pages/empresa/EmpresaPage";
+import VagaPage from "./pages/empresa/VagaPage";
+import VagaDetalhePage from "./pages/empresa/VagaDetalhePage";
+
 
 export default function App() {
   return (
@@ -18,6 +23,13 @@ export default function App() {
           <Route path="tipos" element={<TiposPage />} />
           <Route path="subtipos" element={<SubtiposPage />} />
           <Route path="barreiras" element={<BarreirasPage />} />
+          <Route path="acessibilidades" element={<AcessibilidadesPage />} />
+        </Route>
+
+        {/* Área da empresa com layout e rotas filhas */}
+        <Route path="/empresa/:id" element={<EmpresaPage />}>
+          <Route path="vagas" element={<VagaPage />} />
+          <Route path="vagas/:vagaId" element={<VagaDetalhePage />} />
         </Route>
 
         {/* 404 simples */}

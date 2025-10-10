@@ -4,7 +4,7 @@ export default function AdminPage() {
   const linkBase =
     "px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition";
   const linkActive = "bg-gray-200";
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Topbar simples */}
@@ -12,17 +12,14 @@ export default function AdminPage() {
         <div className="container-page py-4 flex items-center justify-between">
           <h1 className="text-xl font-bold">Admin</h1>
           <nav className="flex gap-2">
-            <NavLink
-              to="/admin/tipos"
-              className={({ isActive }) =>
+            <NavLink to="/admin/tipos" className={({ isActive }) =>
                 `${linkBase} ${isActive ? linkActive : ""}`
               }
             >
               Tipos
             </NavLink>
             <NavLink
-              to="/admin/subtipos"
-              className={({ isActive }) =>
+              to="/admin/subtipos" className={({ isActive }) =>
                 `${linkBase} ${isActive ? linkActive : ""}`
               }
             >
@@ -31,10 +28,18 @@ export default function AdminPage() {
             <NavLink
               to="/admin/barreiras"
               className={({ isActive }) =>
-                `${linkBase} ${isActive ? linkActive : ""}`
-              }
-            >
+                    `${linkBase} ${isActive ? linkActive : ""}`
+            }
+              >
               Barreiras
+            </NavLink>
+            <NavLink
+              to="/admin/acessibilidades"
+              className={({ isActive }) =>
+                    `${linkBase} ${isActive ? linkActive : ""}`
+            }
+              >
+              Acessibilidades
             </NavLink>
           </nav>
         </div>

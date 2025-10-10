@@ -1,5 +1,5 @@
-import type { Barreira, SubtipoDeficiencia, TipoComSubtipos, TipoDeficiencia } from "../types";
 
+import type { TipoDeficiencia, TipoComSubtipos, SubtipoDeficiencia, Barreira, Acessibilidade, Vaga } from "../types";
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
 async function http<T>(path: string, init?: RequestInit): Promise<T> {
@@ -20,8 +20,7 @@ async function http<T>(path: string, init?: RequestInit): Promise<T> {
 }
 
 export const api = {
-
-  listarTipos() { 
+  listarTipos() {
     return http<TipoDeficiencia[]>("/tipos");
   },
   criarTipo(nome: string) {
@@ -30,12 +29,12 @@ export const api = {
       body: JSON.stringify({ nome }),
     });
   },
-  // novos:
+   // novos:
   // GET /subtipos → seu backend retorna Tipos com seus subtipos
   listarTiposComSubtipos(): Promise<TipoComSubtipos[]> {
     return http("/tipos/com-subtipos");
   },
-// POST /subtipos { nome, tipoId }
+    // POST /subtipos { nome, tipoId }
   criarSubtipo(nome: string, tipoId: number): Promise<SubtipoDeficiencia> {
     return http("/subtipos", {
       method: "POST",
@@ -45,8 +44,17 @@ export const api = {
   listarBarreiras(): Promise<Barreira[]> {
     return http("/barreiras");
   },
+  listarAcessibilidades(): Promise<Acessibilidade[]> {
+    return http("/acessibilidades");
+  },
   criarBarreira(descricao: string): Promise<Barreira> {
     return http("/barreiras", {
+      method: "POST",
+      body: JSON.stringify({ descricao }),
+    });
+  },
+  criarAcessibilidade(descricao: string): Promise<Acessibilidade> {
+    return http("/acessibilidades", {
       method: "POST",
       body: JSON.stringify({ descricao }),
     });
@@ -60,5 +68,39 @@ export const api = {
       body: JSON.stringify({ barreiraIds }),
     });
   },
+  vincularAcessibilidadesABarreira(barreiraId: number, acessibilidadeIds: number[]) {
+    return http(`/vinculos/barreiras/${barreiraId}/acessibilidades`, {
+      method: "POST",
+      body: JSON.stringify({ acessibilidadeIds }),
+    });
+  },
+  async buscarEmpresa(id: number) {
+    const res = await fetch(`http://localhost:3000/empresas/${id}`);
+    if (!res.ok) throw new Error("Erro ao buscar empresa");
+    return res.json();
+  },
+  async listarVagas(empresaId: number) {
+    const res = await fetch(`http://localhost:3000/vagas/empresa/${empresaId}`);
+    if (!res.ok) throw new Error("Erro ao listar vagas");
+    return res.json();
+  },
+   async criarVaga(empresaId: number, descricao: string, escolaridade: string) {
+    const res = await fetch("http://localhost:3000/vagas", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ empresaId, descricao, escolaridade }),
+    });
+    if (!res.ok) throw new Error("Erro ao criar vaga");
+    return res.json();
+  },
+   vincularSubtiposAVaga(vagaId: number, subtipoIds: number[]) {
+  return http(`/vagas/${vagaId}/subtipos`, {
+    method: "POST",
+    body: JSON.stringify({ subtipoIds }),
+  });
+  },
+  obterVaga(vagaId: number): Promise<Vaga> {
+  return http(`/vagas/${vagaId}`);
+},
 
 };

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
 import type { TipoComSubtipos } from "../types";
-import SubtipoList from "../components/SubtipoList";
 import SubtipoForm from "../components/SubtipoForm";
+import SubtipoList from "../components/SubtipoList";
 
 export default function SubtiposPage() {
   const [tipos, setTipos] = useState<TipoComSubtipos[]>([]);
@@ -22,9 +22,7 @@ export default function SubtiposPage() {
     }
   }
 
-  useEffect(() => { 
-    carregar(); 
-    }, []);
+  useEffect(() => { carregar(); }, []);
 
   return (
     <div className="container-page space-y-6 py-8">
@@ -33,16 +31,15 @@ export default function SubtiposPage() {
         <p className="text-gray-600">Crie subtipos e consulte por tipo.</p>
       </header>
 
-      <SubtipoForm pedro={carregar}/>
-      {
-      loading ? (
+      <SubtipoForm onCreated={carregar} />
+
+      {loading ? (
         <div className="card">Carregando...</div>
       ) : erro ? (
         <div className="card text-red-600">{erro}</div>
       ) : (
         <SubtipoList tipos={tipos} />
-      )
-      }
+      )}
     </div>
   );
 }

@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react";
 import { api } from "../lib/api";
-import type { Barreira, SubtipoDeficiencia } from "../types";
+import type { Acessibilidade, Barreira} from "../types";
 
 type Props = { onLinked: () => void };
 
-export default function VincularBarreiraForm({ onLinked }: Props) {
-  const [subtipos, setSubtipos] = useState<SubtipoDeficiencia[]>([]);
+export default function VincularAcessibilidadeForm({ onLinked }: Props) {
+  const [acessibilidades, setAcessibilidades] = useState<Acessibilidade[]>([]);
   const [barreiras, setBarreiras] = useState<Barreira[]>([]);
-  const [subtipoId, setSubtipoId] = useState<number | "">("");
-  const [barreiraIds, setBarreiraIds] = useState<number[]>([]);
+  const [barreiraId, setBarreiraId] = useState<number | "">("");
+  const [acessibilidadeIds, setAcessibilidadeIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
   useEffect(() => {
-    Promise.all([api.listarSubtipos(), api.listarBarreiras()])
-      .then(([subs, bars]) => {
-        setSubtipos(subs);
+    Promise.all([api.listarBarreiras(), api.listarAcessibilidades()])
+      .then(([bars, acces]) => {
+        setAcessibilidades(acces);
         setBarreiras(bars);
       })
       .catch((e) => setErro(e.message));
   }, []);
 
-  function toggleBarreira(id: number) {
-    setBarreiraIds((prev) =>
+  function toggleAcessibilidade(id: number) {
+    setAcessibilidadeIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
   }
@@ -31,16 +31,16 @@ export default function VincularBarreiraForm({ onLinked }: Props) {
     e.preventDefault();
     setErro(null);
 
-    if (!subtipoId || barreiraIds.length === 0) {
-      setErro("Selecione um subtipo e ao menos uma barreira.");
+    if (!barreiraId || acessibilidadeIds.length === 0) {
+      setErro("Selecione uma barreira e ao menos uma acessibilidade.");
       return;
     }
 
     setLoading(true);
     try {
-      await api.vincularBarreirasASubtipo(Number(subtipoId), barreiraIds);
-      setBarreiraIds([]);
-      setSubtipoId("");
+      await api.vincularAcessibilidadesABarreira(Number(barreiraId), acessibilidadeIds);
+      setAcessibilidadeIds([]);
+      setBarreiraId("");
       onLinked();
     } catch (e: any) {
       setErro(e.message ?? "Erro ao vincular barreiras");
@@ -52,36 +52,36 @@ export default function VincularBarreiraForm({ onLinked }: Props) {
   return (
     <form onSubmit={handleSubmit} className="card space-y-3">
       <div>
-        <label className="label">Subtipo</label>
+         <label className="label">Barreira</label>
         <select
           className="input"
-          value={subtipoId}
+          value={barreiraId}
           onChange={(e) =>
-            setSubtipoId(e.target.value ? Number(e.target.value) : "")
+            setBarreiraId(e.target.value ? Number(e.target.value) : "")
           }
           disabled={loading}
         >
           <option value="">Selecione...</option>
-          {subtipos.map((s) => (
+          {barreiras.map((s) => (
             <option key={s.id} value={s.id}>
-              {s.nome}
+              {s.descricao}
             </option>
           ))}
         </select>
       </div>
 
       <div>
-        <label className="label">Barreiras</label>
+        <label className="label">Acessibilidades</label>
         <div className="space-y-2">
-          {barreiras.map((b) => (
-            <label key={b.id} className="flex items-center gap-2">
+          {acessibilidades.map((a) => (
+            <label key={a.id} className="flex items-center gap-2">
               <input
                 type="checkbox"
-                checked={barreiraIds.includes(b.id)}
-                onChange={() => toggleBarreira(b.id)}
+                checked={acessibilidadeIds.includes(a.id)}
+                onChange={() => toggleAcessibilidade(a.id)}
                 disabled={loading}
               />
-              {b.descricao}
+              {a.descricao}
             </label>
           ))}
         </div>
@@ -91,7 +91,7 @@ export default function VincularBarreiraForm({ onLinked }: Props) {
 
       <div className="flex justify-end">
         <button disabled={loading} className="btn btn-primary">
-          {loading ? "Salvando..." : "Vincular barreiras"}
+          {loading ? "Salvando..." : "Vincular acessibilidades"}
         </button>
       </div>
     </form>

@@ -1,11 +1,14 @@
 import type { TipoDeficiencia } from "../types";
+
 type Props = {
   tipos: TipoDeficiencia[];
 };
+
 export default function TipoList({ tipos }: Props) {
   if (!tipos.length) {
     return <div className="card text-gray-500">Nenhum tipo cadastrado ainda.</div>;
   }
+
   return (
     <div className="card">
       <h3 className="text-lg font-semibold mb-3">Tipos cadastrados</h3>
