@@ -53,6 +53,9 @@ export default function EmpresaPage() {
         </nav>
         
       </header>
+           
+       
+     
       <main className="p-6">
         <Outlet />
       </main>

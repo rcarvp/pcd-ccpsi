@@ -4,9 +4,10 @@ import type { SubtipoDeficiencia } from "../../types";
 
 type Props = {
   vagaId: number;
+  onUpdated?: () => void; 
 };
 
-export default function VagaSubtiposForm({ vagaId }: Props) {
+export default function VagaSubtiposForm({ vagaId, onUpdated  }: Props) {
   const [subtipos, setSubtipos] = useState<SubtipoDeficiencia[]>([]);
   const [selecionados, setSelecionados] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ export default function VagaSubtiposForm({ vagaId }: Props) {
     try {
       await api.vincularSubtiposAVaga(vagaId, selecionados);
       setOk(true);
+      onUpdated?.(); 
     } catch (err: any) {
       setErro(err.message ?? "Erro ao vincular subtipos");
     } finally {

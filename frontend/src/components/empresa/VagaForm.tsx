@@ -37,13 +37,13 @@ export default function VagaForm({ empresaId, onCreated }: Props) {
     <form onSubmit={handleSubmit} className="card space-y-3">
       <div>
         <label className="label">Descrição da vaga</label>
-        <input
-          className="input"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          placeholder="Ex.: Atendimento remoto"
-          disabled={loading}
-        />
+         <textarea
+    className="input min-h-[100px]"
+    placeholder="Descreva a vaga, responsabilidades, requisitos, etc."
+    value={descricao}
+    onChange={(e) => setDescricao(e.target.value)}
+    disabled={loading}
+  />
       </div>
 
       <div>

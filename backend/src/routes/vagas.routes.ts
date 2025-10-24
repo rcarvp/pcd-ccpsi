@@ -11,4 +11,6 @@ r.post("/", VagasController.criar);
 r.post("/:id/subtipos", VagasController.vincularSubtipos);
 r.post("/:id/acessibilidades", VagasController.vincularAcessibilidades);
 
+r.get("/:id/acessibilidades-disponiveis", VagasController.getAcessibilidadesPossiveis);
+
 export default r;

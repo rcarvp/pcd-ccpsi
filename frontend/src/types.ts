@@ -46,6 +46,8 @@ export type Vaga = {
   descricao: string;
   escolaridade: string;
   empresaId: number;
+  subtipos: SubtipoDeficiencia[];
   createdAt?: string;
   updatedAt?: string;
+
 };

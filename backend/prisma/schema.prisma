@@ -32,6 +32,7 @@ model SubtipoDeficiencia {
 
   @@unique([tipoId, nome]) // evita subtipo duplicado dentro do mesmo tipo
   VagaSubtipo VagaSubtipo[]
+  CandidatoSubtipo CandidatoSubtipo[]
 }
 
 model Barreira {
@@ -41,6 +42,8 @@ model Barreira {
   acessibilidades BarreiraAcessibilidade[]
   createdAt       DateTime                 @default(now())
   updatedAt       DateTime                 @updatedAt
+
+  CandidatoSubtipoBarreira CandidatoSubtipoBarreira[]
 }
 
 model Acessibilidade {
@@ -119,4 +122,47 @@ model VagaAcessibilidade {
 
   @@id([vagaId, acessibilidadeId])
   @@index([acessibilidadeId])
+}
+
+model Candidato {
+  id        Int                 @id @default(autoincrement())
+  nome      String              
+  email     String?             @unique
+  telefone  String?
+  escolaridade String
+
+  // Relações
+  subtipos  CandidatoSubtipo[]
+
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([nome])
+}
+
+// N:N Candidato <-> Subtipo
+model CandidatoSubtipo {
+  candidatoId Int
+  subtipoId   Int
+  candidato   Candidato           @relation(fields: [candidatoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  subtipo     SubtipoDeficiencia  @relation(fields: [subtipoId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  barreiras   CandidatoSubtipoBarreira[]  // relação contextual (por subtipo)
+
+  @@id([candidatoId, subtipoId])
+  @@index([subtipoId])
+}
+
+// N:N contextual (candidato + subtipo) <-> barreira
+model CandidatoSubtipoBarreira {
+  candidatoId Int
+  subtipoId   Int
+  barreiraId  Int
+
+  candidatoSubtipo CandidatoSubtipo @relation(fields: [candidatoId, subtipoId], references: [candidatoId, subtipoId], onDelete: Cascade, onUpdate: Cascade)
+  barreira         Barreira         @relation(fields: [barreiraId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([candidatoId, subtipoId, barreiraId])
+  @@index([barreiraId])
 }

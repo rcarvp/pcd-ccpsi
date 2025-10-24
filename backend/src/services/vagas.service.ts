@@ -35,4 +35,23 @@ export const VagasService = {
 
     return VagasRepo.linkAcessibilidades(vagaId, acessibilidadeIds);
   },
+
+    async listarAcessibilidadesPossiveis(vagaId: number) {
+    const vaga = await VagasRepo.findByIdWithSubtiposBarreirasAcessibilidades(vagaId);
+    if (!vaga) throw new Error("Vaga não encontrada");
+
+    // Junta todas as acessibilidades das barreiras dos subtipos da vaga
+    const acessibilidades = vaga.subtiposAceitos.flatMap((vs) =>
+      vs.subtipo.barreiras.flatMap((sb) =>
+        sb.barreira.acessibilidades.map((ba) => ba.acessibilidade)
+      )
+    );
+
+    // Remove duplicadas
+    const unicas = acessibilidades.filter(
+      (a, i, arr) => arr.findIndex((x) => x.id === a.id) === i
+    );
+
+    return unicas;
+  },
 };

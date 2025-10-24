@@ -1,5 +1,5 @@
-import type { Vaga } from "../../types";
 import { Link, useParams } from "react-router-dom";
+import type { Vaga } from "../../types";
 
 type Props = {
   vagas: Vaga[];
@@ -8,7 +8,7 @@ type Props = {
 export default function VagaList({ vagas }: Props) {
   const { id: empresaId } = useParams();
 
-  if (!vagas.length) {
+  if (!vagas?.length) {
     return <div className="card text-gray-500">Nenhuma vaga cadastrada ainda.</div>;
   }
 
@@ -22,13 +22,12 @@ export default function VagaList({ vagas }: Props) {
               <p className="font-medium">{v.descricao}</p>
               <p className="text-sm text-gray-500">Escolaridade: {v.escolaridade}</p>
             </div>
-              <Link
+            <Link
               to={`/empresa/${empresaId}/vagas/${v.id}`}
               className="text-blue-600 hover:underline text-sm"
             >
               Gerenciar
             </Link>
-
           </li>
         ))}
       </ul>

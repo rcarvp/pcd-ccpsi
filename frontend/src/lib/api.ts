@@ -93,7 +93,7 @@ export const api = {
     if (!res.ok) throw new Error("Erro ao criar vaga");
     return res.json();
   },
-   vincularSubtiposAVaga(vagaId: number, subtipoIds: number[]) {
+  vincularSubtiposAVaga(vagaId: number, subtipoIds: number[]) {
   return http(`/vagas/${vagaId}/subtipos`, {
     method: "POST",
     body: JSON.stringify({ subtipoIds }),
@@ -101,6 +101,19 @@ export const api = {
   },
   obterVaga(vagaId: number): Promise<Vaga> {
   return http(`/vagas/${vagaId}`);
+},
+listarAcessibilidadesPossiveis(vagaId: number) {
+  return http<Acessibilidade[]>(`/vagas/${vagaId}/acessibilidades-disponiveis`);
+},
+vincularAcessibilidadesAVaga(vagaId: number, acessibilidadeIds: number[]) {
+  return http(`/vagas/${vagaId}/acessibilidades`, {
+    method: "POST",
+    body: JSON.stringify({ acessibilidadeIds }),
+  });
+},
+
+obterVagaComSubtipos(vagaId: number) {
+  return http<Vaga>(`/vagas/${vagaId}`);
 },
 
 };

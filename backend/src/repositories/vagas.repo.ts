@@ -41,4 +41,32 @@ export const VagasRepo = {
     const data = acessibilidadeIds.map((acessibilidadeId) => ({ vagaId, acessibilidadeId }));
     return prisma.vagaAcessibilidade.createMany({ data, skipDuplicates: true });
   },
+
+   async findByIdWithSubtiposBarreirasAcessibilidades(vagaId: number) {
+    return prisma.vaga.findUnique({
+      where: { id: vagaId },
+      include: {
+        subtiposAceitos: {
+          include: {
+            subtipo: {
+              include: {
+                barreiras: {
+                  include: {
+                    barreira: {
+                      include: {
+                        acessibilidades: {
+                          include: { acessibilidade: true },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  },
+
 };

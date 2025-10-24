@@ -4,7 +4,7 @@ import { VagasService } from "../services/vagas.service";
 
 export const VagasController = {
   async listar(req: Request, res: Response) {
-     const empresaId = req.query.empresaId ? Number(req.query.empresaId) : undefined;
+     const empresaId = req.params.empresaId ? Number(req.params.empresaId) : undefined;
     const data = await VagasRepo.list(empresaId);
     res.json(data);
   },
@@ -59,4 +59,19 @@ export const VagasController = {
       res.status(400).json({ error: e.message ?? "Erro ao vincular acessibilidades" });
     }
   },
+
+  async getAcessibilidadesPossiveis(req: Request, res: Response) {
+    try {
+      const vagaId = Number(req.params.id);
+      if (isNaN(vagaId)) {
+        return res.status(400).json({ error: "ID inválido" });
+      }
+
+      const acess = await VagasService.listarAcessibilidadesPossiveis(vagaId);
+      res.json(acess);
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Erro ao listar acessibilidades" });
+    }
+  },
+  
 };
