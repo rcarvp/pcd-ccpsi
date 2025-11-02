@@ -9,6 +9,7 @@ import AcessibilidadesPage from "./pages/AcessibilidadesPage";
 import EmpresaPage from "./pages/empresa/EmpresaPage";
 import VagaPage from "./pages/empresa/VagaPage";
 import VagaDetalhePage from "./pages/empresa/VagaDetalhePage";
+import CandidatoPage from "./pages/candidato/CandidatoPage";
 
 
 export default function App() {
@@ -31,6 +32,8 @@ export default function App() {
           <Route path="vagas" element={<VagaPage />} />
           <Route path="vagas/:vagaId" element={<VagaDetalhePage />} />
         </Route>
+
+       <Route path="/candidato/:id" element={<CandidatoPage />} />
 
         {/* 404 simples */}
         <Route path="*" element={<div className="container-page py-8">Página não encontrada.</div>} />

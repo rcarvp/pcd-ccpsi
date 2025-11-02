@@ -1,5 +1,5 @@
 
-import type { TipoDeficiencia, TipoComSubtipos, SubtipoDeficiencia, Barreira, Acessibilidade, Vaga } from "../types";
+import type { TipoDeficiencia, TipoComSubtipos, SubtipoDeficiencia, Barreira, Acessibilidade, Vaga, Candidato } from "../types";
 const BASE_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
 
 async function http<T>(path: string, init?: RequestInit): Promise<T> {
@@ -115,5 +115,28 @@ vincularAcessibilidadesAVaga(vagaId: number, acessibilidadeIds: number[]) {
 obterVagaComSubtipos(vagaId: number) {
   return http<Vaga>(`/vagas/${vagaId}`);
 },
-
+// Candidatos
+  getCandidato(id: number) {
+    return http<Candidato>(`/candidatos/${id}`);
+  },
+   // Subtipos do candidato
+  listarSubtiposCandidato(id: number) {
+    return http<SubtipoDeficiencia[]>(`/candidatos/${id}/subtipos`);
+  },
+    // Barreiras de um subtipo
+  listarBarreirasPorSubtipo(subtipoId: number) {
+    return http<Barreira[]>(`/subtipos/${subtipoId}`);
+  },
+ vincularSubtiposACandidato(candidatoId: number, subtipoIds: number[]) {
+    return http(`/candidatos/${candidatoId}/subtipos`, {
+      method: "POST",
+      body: JSON.stringify({ subtipoIds }),
+    });
+  },
+  vincularBarreirasACandidato(candidatoId: number, subtipoId: number, barreiraIds: number[]) {
+    return http(`/candidatos/${candidatoId}/subtipos/${subtipoId}/barreiras`, {
+      method: "POST",
+      body: JSON.stringify({ barreiraIds }),
+    });
+  },
 };

@@ -1,6 +1,7 @@
 export type Barreira = {
   id: number;
   descricao: string;
+  acessibilidades: Acessibilidade[]
   createdAt?: string;
   updatedAt?: string;
 };
@@ -50,4 +51,24 @@ export type Vaga = {
   createdAt?: string;
   updatedAt?: string;
 
+};
+
+export type Candidato = {
+  id: number;
+  nome: string;
+  email?: string;
+  telefone?: string;
+  escolaridade: string;
+  subtipos?: CandidatoSubtipo[];
+};
+
+export type CandidatoSubtipo = {
+  subtipoId: number;
+  subtipo: SubtipoDeficiencia;
+  barreiras?: CandidatoSubtipoBarreira[];
+};
+
+export type CandidatoSubtipoBarreira = {
+  barreiraId: number;
+  barreira: Barreira;
 };
