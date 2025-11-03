@@ -12,6 +12,7 @@ import vinculosRoutes from "./routes/vinculos.routes"
 import empresasRoutes from "./routes/empresas.routes";
 import vagasRoutes from "./routes/vagas.routes";
 import candidatoRoutes from "./routes/candidatos.routes";
+import { matchRoutes } from "./routes/match.routes";
 const app = express();
 const prisma = new PrismaClient();
 app.use(cors({ origin: true })); // antes das rotas
@@ -28,6 +29,9 @@ app.use("/empresas", empresasRoutes);
 app.use("/vagas", vagasRoutes);
 
 app.use("/candidatos", candidatoRoutes);
+
+// nova rota de match
+app.use("/match", matchRoutes);
 
 // middleware de erro genérico
 app.use((err: any, _req: any, res: any, _next: any) => {
