@@ -10,6 +10,7 @@ import EmpresaPage from "./pages/empresa/EmpresaPage";
 import VagaPage from "./pages/empresa/VagaPage";
 import VagaDetalhePage from "./pages/empresa/VagaDetalhePage";
 import CandidatoPage from "./pages/candidato/CandidatoPage";
+import CandidatoVagasPage from "./pages/candidato/CandidatoVagasPage";
 
 
 export default function App() {
@@ -33,7 +34,9 @@ export default function App() {
           <Route path="vagas/:vagaId" element={<VagaDetalhePage />} />
         </Route>
 
-       <Route path="/candidato/:id" element={<CandidatoPage />} />
+       {/* Área do candidato */}
+        <Route path="/candidato/:id" element={<CandidatoPage />} />
+        <Route path="/candidato/:id/vagas" element={<CandidatoVagasPage />} />
 
         {/* 404 simples */}
         <Route path="*" element={<div className="container-page py-8">Página não encontrada.</div>} />

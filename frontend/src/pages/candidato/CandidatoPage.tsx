@@ -35,18 +35,25 @@ export default function CandidatoPage() {
   return (
     <div className="container-page space-y-6 py-8">
       <header>
-        <nav className="space-x-4">
-          <NavLink
-            to={`/candidato/${candidatoId}`}
-            className={({ isActive }) =>
-              isActive
-                ? "font-semibold underline"
-                : "hover:underline text-blue-100"
-            }
-          >
-            Minhas Vagas
-          </NavLink>
-        </nav>
+         <nav className="space-x-4 mb-4">
+    <NavLink
+      to={`/candidato/${candidatoId}`}
+      className={({ isActive }) =>
+        isActive ? "font-semibold underline" : "hover:underline text-blue-600"
+      }
+    >
+      Subtipos e Barreiras
+    </NavLink>
+
+    <NavLink
+      to={`/candidato/${candidatoId}/vagas`}
+      className={({ isActive }) =>
+        isActive ? "font-semibold underline" : "hover:underline text-blue-600"
+      }
+    >
+      Minhas Vagas
+    </NavLink>
+  </nav>
         <h1 className="text-2xl font-bold">Candidato: {candidato.nome}</h1>
         <h1 className="text-2xl font-bold">Escolaridade: {candidato.escolaridade}</h1>
         <p className="text-gray-600">Configure seus subtipos e barreiras.</p>

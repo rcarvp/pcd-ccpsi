@@ -139,4 +139,7 @@ obterVagaComSubtipos(vagaId: number) {
       body: JSON.stringify({ barreiraIds }),
     });
   },
+   async listarVagasCompativeis(candidatoId: number): Promise<Vaga[]> {
+    return http<Vaga[]>(`/match/${candidatoId}`);
+  },
 };
