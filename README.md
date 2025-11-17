@@ -7,15 +7,16 @@ Baixe os arquivos do repositório e faça a extração em uma pasta ***diferente
 Abra um prompt de comando **dentro da pasta backend**. Se estiver abrindo o terminal pelo VSCode, não esqueça de abrir novas abas como "command prompt".  
 Execute os comandos, nessa ordem:  
 
-    npm i  
+    npm install  
     npx prisma migrate dev --name banco-limpo  
     npm run dev  
 
 O backend deve estar funcionando na porta 3000. Use "npm run dev" na pasta backend para subir novamente quando precisar.
+Se fizer alguma alteração no banco de dados (schema.prisma), use o comando migrate.
 
 Agora abra um novo prompt **dentro da pasta frontend**. Execute os comandos:
 
-    npm i  
+    npm install  
     npm run dev  
 
 O frontend deve estar funcionando na porta 5173.  
